@@ -41,10 +41,7 @@ function createProduct(data) {
     });
 }
 
-btn.addEventListener("click", () => {
-    offset++
-    getData("products", offset)
-})
+
 
 async function getCategory(endpoint) {
     const response = await fetch(`${LINK}/${endpoint}`)
@@ -54,17 +51,17 @@ async function getCategory(endpoint) {
 }
 getCategory("products/category-list")
 
+let categoryType = "products"
 function createCategory(data) {
     data.forEach((item) => {
         const liEl = document.createElement("li")
         const dataEl = document.createElement("data")
         liEl.className = "category_item"
-
         dataEl.innerHTML = item
         dataEl.setAttribute("value", `/category/${item}`)
-
         dataEl.addEventListener("click", (e) => {
-            getData(`products${e.target.value}`, offset)
+            categoryType = "products/" + e.target.value
+            getData(categoryType, offset)
         })
 
         liEl.appendChild(dataEl)
@@ -72,6 +69,10 @@ function createCategory(data) {
     })
 }
 
+btn.addEventListener("click", () => {
+    offset++
+    getData(categoryType, offset)
+})
 wrapper.addEventListener("click", (e) => {
     if (e.target.className === "card_image") {
         let id = e.target.closest(".card").dataset.id
